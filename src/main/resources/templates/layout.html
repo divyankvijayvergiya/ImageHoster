@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org">
+    <head th:fragment="site-head">
+        <title>Spring MVC Application - Image Hoster</title>
+    </head>
+    <body>
+        <!-- The logged-out fragment now contains Login as well as Registration-->
+        <header th:fragment="logged-out" th:remove="tag">
+            <header>
+                <a href="users/registration.html" th:href="@{/users/registration}">Registration</a>
+                <a href="users/login.html" th:href="@{/users/login}">Login</a>
+            </header>
+        </header>
+    </body>
+</html>
