@@ -1,20 +1,28 @@
 package imageHoster.service;
 
 import imageHoster.model.User;
+import imageHoster.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
+    @Autowired
+    UserRepository userRepository;
+
     public void registerUser(User newUser) {
-        return;
+        userRepository.registerUser(newUser);
     }
 
-    public boolean login(User user) {
-        if (user.getUsername().equals("admin") && user.getPassword().equals("admin")) {
-            return true;
+    public User login(User user) {
+        User existingUser = userRepository.checkUser(user.getUsername(), user.getPassword());
+
+        if(existingUser!=null){
+            return existingUser;
         } else {
-            return false;
+            return null;
         }
     }
+
 
 }

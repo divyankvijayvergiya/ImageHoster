@@ -1,9 +1,24 @@
 package imageHoster.model;
 
+import javax.persistence.*;
+
+@SuppressWarnings("ALL")
+@Entity
+@Table(name = "user_profile")
 public class UserProfile {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
     private int id;
+
+    @Column(name = "full_name")
     private String fullName;
+
+    @Column(name = "email_address")
     private String email;
+
+    @Column(name = "mobile_number")
     private String mobileNumber;
 
     public int getId() {

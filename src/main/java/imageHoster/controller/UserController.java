@@ -9,6 +9,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import javax.servlet.http.HttpSession;
+
 @Controller
 public class UserController {
 
@@ -28,7 +30,8 @@ public class UserController {
         //Complete this method
         //Call the business logic which currently does not store the details of the user in the database
         //After registration, again redirect to the registration page
-        return "redirect:/users/login";
+        userService.registerUser(user);
+        return "users/login";
     }
 
     @RequestMapping("users/login")
@@ -36,13 +39,16 @@ public class UserController {
         return "users/login";
     }
     @RequestMapping(value = "users/login", method = RequestMethod.POST)
-    public String loginUser(User user){
-        if(userService.login(user)){
+    public String loginUser(User user, HttpSession session){
+        User existingUser = userService.login(user);
+        if(existingUser != null){
+            session.setAttribute("loggedUser", existingUser);
             return "redirect:/images";
         } else {
             return "users/login";
         }
     }
+
 
 
 }

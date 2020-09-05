@@ -1,37 +1,49 @@
 package imageHoster.model;
-
+import javax.persistence.*;
 import java.util.Date;
 
+@SuppressWarnings("ALL")
+@Entity
+@Table(name = "images")
 public class Image {
 
-    //id of the image
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
     private Integer id;
 
-    //title of the image
+    @Column(name = "title")
     private String title;
 
-    //The image in Base64 format
+    @Column(columnDefinition = "TEXT")
     private String imageFile;
 
-    //Description of the image
+    @Column(name = "description")
     private String description;
 
-    //Date on which the image is posted
+    @Column(name = "date")
     private Date date;
 
-    public Image(int id, String title, String imageFile, Date date) {
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    public Image(Integer id, String title, String imageFile, Date date) {
         this.id = id;
         this.title = title;
         this.imageFile = imageFile;
         this.date = date;
     }
 
-    public Image(int id, String title, String imageFile, String description, Date date) {
+    public Image(Integer id, String title, String imageFile, String description, Date date) {
         this.id = id;
         this.title = title;
         this.imageFile = imageFile;
         this.description = description;
         this.date = date;
+    }
+
+    public Image() {
     }
 
     public Integer getId() {
@@ -72,5 +84,13 @@ public class Image {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }
