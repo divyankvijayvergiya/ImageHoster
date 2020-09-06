@@ -29,7 +29,7 @@ public class ImageService {
 
     //The method returns the list of two harc-coded images
     public List<Image> getAllImages() {
-        return new ImageService().images;
+        return imageRepository.getAllImages();
     }
 
     //The method does not store the image in the database
@@ -37,5 +37,27 @@ public class ImageService {
         image.setDate(new Date());
         imageRepository.uploadImage(image);
         System.out.println("New Image: " + image);
+    }
+
+
+    //The method calls the getImageByTitle() method in the Repository and passes the title of the image to be fetched
+    public Image getImageByTitle(String title) {
+        return imageRepository.getImageByTitle(title);
+    }
+
+    //The method calls the getImage() method in the Repository and passes the id of the image to be fetched
+    public Image getImage(Integer imageId) {
+        return imageRepository.getImage(imageId);
+    }
+
+    //The method calls the updateImage() method in the Repository and passes the Image to be updated in the database
+    public void updateImage(Image updatedImage) {
+        updatedImage.setDate(new Date());
+        imageRepository.updateImage(updatedImage);
+    }
+
+    //The method calls the deleteImage() method in the Repository and passes the Image id of the image to be deleted in the database
+    public void deleteImage(Integer imageId) {
+        imageRepository.deleteImage(imageId);
     }
 }

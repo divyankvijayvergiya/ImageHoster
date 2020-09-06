@@ -2,6 +2,7 @@ package imageHoster.controller;
 
 import imageHoster.model.User;
 import imageHoster.model.UserProfile;
+import imageHoster.service.ImageService;
 import imageHoster.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,8 +17,11 @@ public class UserController {
 
     @Autowired
     UserService userService;
+    @Autowired
+    ImageService imageService;
+
     @RequestMapping("users/registration")
-    public String registration(Model model){
+    public String registration(Model model) {
         User user = new User();
         UserProfile profile = new UserProfile();
         user.setProfile(profile);
@@ -38,10 +42,11 @@ public class UserController {
     public String login() {
         return "users/login";
     }
+
     @RequestMapping(value = "users/login", method = RequestMethod.POST)
-    public String loginUser(User user, HttpSession session){
+    public String loginUser(User user, HttpSession session) {
         User existingUser = userService.login(user);
-        if(existingUser != null){
+        if (existingUser != null) {
             session.setAttribute("loggedUser", existingUser);
             return "redirect:/images";
         } else {
@@ -49,6 +54,16 @@ public class UserController {
         }
     }
 
-
+    //This controller method is called when the request pattern is of type 'users/logout' and also the incoming request is of POST type
+    //The method receives the Http Session and the Model type object
+    //session is invalidated
+    //All the images are fetched from the database and added to the model with 'images' as the key
+    //'index.html' file is returned showing the landing page of the application and displaying all the images in the application
+    @RequestMapping(value = "users/logout", method = RequestMethod.POST)
+    public String logout(Model model, HttpSession session) {
+        session.invalidate();
+        model.addAttribute("images", imageService.getAllImages());
+        return "index";
+    }
 
 }

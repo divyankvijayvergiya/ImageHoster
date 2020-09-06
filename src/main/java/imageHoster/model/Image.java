@@ -1,6 +1,8 @@
 package imageHoster.model;
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @SuppressWarnings("ALL")
 @Entity
@@ -27,6 +29,12 @@ public class Image {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User user;
+
+    //The attribute contains a list of all the tags of an image
+    //Note that no column will be generated for this attribute in the database instead a new table will be created
+    //Since the mapping is Many to Many, a new table will be generated containing the two columns both referencing to the primary key of both the tables ('images', 'tags')
+    @ManyToMany(fetch = FetchType.LAZY)
+    private List<Tag> tags = new ArrayList<>();
 
     public Image(Integer id, String title, String imageFile, Date date) {
         this.id = id;
@@ -92,5 +100,13 @@ public class Image {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public List<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<Tag> tags) {
+        this.tags = tags;
     }
 }
