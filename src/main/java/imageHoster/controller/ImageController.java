@@ -38,12 +38,6 @@ public class ImageController {
     @RequestMapping("/images//{imageId}/{title}")
     public String showImage(Model model, @PathVariable String title, @PathVariable Integer imageId) {
         Date date = new Date();
-//        Image image = null;
-//        if (title.equals("Dr. Strange")) {
-//            image = new Image(1, "Dr. Strange", hardCodedImage.getDrStrange(), "Dr. Strange has a time stone", date);
-//        } else if (title.equals("SpiderMan")) {
-//            image = new Image(2, "SpiderMan", hardCodedImage.getSpiderMan(), "Spider man dies in Infinity War", date);
-//        }
         Image image = imageService.getImageById(imageId);
         model.addAttribute("image", image);
         model.addAttribute("tags", image.getTags());
