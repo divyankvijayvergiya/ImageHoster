@@ -35,8 +35,8 @@ public class ImageController {
         return "images";
     }
 
-    @RequestMapping("/images/{title}")
-    public String showImage(@PathVariable("title") String title, Model model) {
+    @RequestMapping("/images//{imageId}/{title}")
+    public String showImage(Model model, @PathVariable String title, @PathVariable Integer imageId) {
         Date date = new Date();
 //        Image image = null;
 //        if (title.equals("Dr. Strange")) {
@@ -44,7 +44,7 @@ public class ImageController {
 //        } else if (title.equals("SpiderMan")) {
 //            image = new Image(2, "SpiderMan", hardCodedImage.getSpiderMan(), "Spider man dies in Infinity War", date);
 //        }
-        Image image = imageService.getImageByTitle(title);
+        Image image = imageService.getImageById(imageId);
         model.addAttribute("image", image);
         model.addAttribute("tags", image.getTags());
         return "images/image";
