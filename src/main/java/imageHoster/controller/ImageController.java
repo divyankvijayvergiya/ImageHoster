@@ -27,7 +27,7 @@ public class ImageController {
     ImageService imageService;
     @Autowired
     private HardCodedImage hardCodedImage;
-    String error = "Only the owner of the image can edit the image";
+
     @RequestMapping("/images")
     public String getAllImagePosts(Model model) {
 
@@ -76,12 +76,21 @@ public class ImageController {
     //This method fetches the image with the corresponding id from the database and adds it to the model with the key as 'image'
     //The method then returns 'images/edit.html' file wherein you fill all the updated details of the image
     @RequestMapping(value = "/editImage", method = RequestMethod.GET)
-    public String editImage(@RequestParam("imageId") Integer imageId, Model model) {
+    public String editImage(@RequestParam("imageId") Integer imageId, Model model, HttpSession session) {
+        User user = (User) session.getAttribute("loggedUser");
         Image image = imageService.getImage(imageId);
-        String tags = convertTagsToString(image.getTags());
-        model.addAttribute("image", image);
-        model.addAttribute("tags", tags);
-        return "images/edit.html";
+        if (image.getUser().getId() != user.getId()) {
+            String error = "Only the owner of the image can edit the image";
+            model.addAttribute("image", image);
+            model.addAttribute("tags", image.getTags());
+            model.addAttribute("editError", error);
+            return "images/image";
+        } else {
+            String tags = convertTagsToString(image.getTags());
+            model.addAttribute("image", image);
+            model.addAttribute("tags", tags);
+            return "images/edit";
+        }
     }
 
     //This controller method is called when the request pattern is of type 'images/edit' and also the incoming request is of PUT type
@@ -119,10 +128,20 @@ public class ImageController {
     //The method calls the deleteImage() method in the business logic passing the id of the image to be deleted
     //Looks for a controller method with request mapping of type '/images'
     @RequestMapping(value = "/deleteImage", method = RequestMethod.DELETE)
-    public String deleteImageSubmit(@RequestParam(name = "imageId") Integer imageId) {
-        imageService.deleteImage(imageId);
+    public String deleteImageSubmit(@RequestParam(name = "imageId") Integer imageId, HttpSession session, Model model) {
+        User user = (User) session.getAttribute("loggedUser");
+        Image image = imageService.getImage(imageId);
+        if (image.getUser().getId() != user.getId()) {
+            String error = "Only the owner of the image can delete the image";
+            model.addAttribute("image", image);
+            model.addAttribute("tags", image.getTags());
+            model.addAttribute("deleteError", error);
+            return "images/image";
+        } else {
+            imageService.deleteImage(imageId);
+            return "redirect:/images";
+        }
 
-        return "redirect:/images";
     }
 
     //This method converts the image to Base64 format
@@ -156,7 +175,7 @@ public class ImageController {
         for (int i = 0; i <= tags.size() - 2; i++) {
             tagString.append(tags.get(i).getName()).append(",");
         }
-        if(tags.size()>0) {
+        if (tags.size() > 0) {
             Tag lastTag = tags.get(tags.size() - 1);
             tagString.append(lastTag.getName());
         }
