@@ -27,7 +27,7 @@ public class ImageController {
     ImageService imageService;
     @Autowired
     private HardCodedImage hardCodedImage;
-
+    String error = "Only the owner of the image can edit the image";
     @RequestMapping("/images")
     public String getAllImagePosts(Model model) {
 
@@ -112,7 +112,7 @@ public class ImageController {
         updatedImage.setUser(user);
         imageService.updateImage(updatedImage);
 
-        return "redirect:/images";
+        return "redirect:/images" + updatedImage.getTitle();
     }
 
     //This controller method is called when the request pattern is of type 'deleteImage' and also the incoming request is of DELETE type
