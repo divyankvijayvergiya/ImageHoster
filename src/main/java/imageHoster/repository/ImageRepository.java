@@ -1,5 +1,6 @@
 package imageHoster.repository;
 
+import imageHoster.model.Comment;
 import imageHoster.model.Image;
 import imageHoster.model.User;
 import org.springframework.stereotype.Repository;
@@ -108,4 +109,7 @@ public class ImageRepository {
             entityTransaction.rollback();
         }
     }
+
+
+
 }

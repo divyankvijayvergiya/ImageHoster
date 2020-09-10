@@ -1,6 +1,7 @@
 package imageHoster.service;
 
 import imageHoster.HardCodedImage;
+import imageHoster.model.Comment;
 import imageHoster.model.Image;
 import imageHoster.repository.ImageRepository;
 import org.springframework.beans.factory.annotation.Autowired;

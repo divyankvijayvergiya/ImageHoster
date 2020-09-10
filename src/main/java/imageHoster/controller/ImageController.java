@@ -1,6 +1,7 @@
 package imageHoster.controller;
 
 import imageHoster.HardCodedImage;
+import imageHoster.model.Comment;
 import imageHoster.model.Image;
 import imageHoster.model.Tag;
 import imageHoster.model.User;
@@ -17,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.*;
 
 @Controller
@@ -143,6 +145,8 @@ public class ImageController {
         }
 
     }
+
+
 
     //This method converts the image to Base64 format
     private String convertUploadedFileToBase64(MultipartFile file) throws IOException {
