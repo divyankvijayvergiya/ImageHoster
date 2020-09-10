@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpSession;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Controller
 public class UserController {
@@ -30,12 +32,19 @@ public class UserController {
     }
 
     @RequestMapping(value = "users/registration", method = RequestMethod.POST)
-    public String registerUser(User user) {
+    public String registerUser(User user, Model model) {
         //Complete this method
         //Call the business logic which currently does not store the details of the user in the database
         //After registration, again redirect to the registration page
-        userService.registerUser(user);
-        return "users/login";
+        if (isValidPassword(user.getPassword())) {
+            userService.registerUser(user);
+            return "users/login";
+        } else {
+            String error = "Password must contain atleast 1 alphabet, 1 number & 1 special character";
+            model.addAttribute("User", user);
+            model.addAttribute("passwordTypeError", error);
+            return "users/registration";
+        }
     }
 
     @RequestMapping("users/login")
@@ -64,6 +73,31 @@ public class UserController {
         session.invalidate();
         model.addAttribute("images", imageService.getAllImages());
         return "index";
+    }
+
+    private boolean isValidPassword(String password) {
+        // Regex to check valid password.
+        String regex = "^(?=.*[0-9])"
+                + "(?=.*[a-zA-Z])"
+                + "(?=.*[@#$%^&-+=()])"
+                + ".{3,40}$";
+        // Compile the ReGex
+        Pattern p = Pattern.compile(regex);
+
+        // If the password is empty
+        // return false
+        if (password == null) {
+            return false;
+        }
+
+        // Pattern class contains matcher() method
+        // to find matching between given password
+        // and regular expression.
+        Matcher m = p.matcher(password);
+
+        // Return if the password
+        // matched the ReGex
+        return m.matches();
     }
 
 }
