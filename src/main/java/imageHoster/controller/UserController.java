@@ -63,7 +63,7 @@ public class UserController {
         }
     }
 
-    //This controller method is called when the request pattern is of type 'users/logout' and also the incoming request is of POST type
+    //This imageHoster.controller method is called when the request pattern is of type 'users/logout' and also the incoming request is of POST type
     //The method receives the Http Session and the Model type object
     //session is invalidated
     //All the images are fetched from the database and added to the model with 'images' as the key

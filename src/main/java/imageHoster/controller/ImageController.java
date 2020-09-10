@@ -1,7 +1,5 @@
 package imageHoster.controller;
 
-import imageHoster.HardCodedImage;
-import imageHoster.model.Comment;
 import imageHoster.model.Image;
 import imageHoster.model.Tag;
 import imageHoster.model.User;
@@ -18,7 +16,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.*;
 
 @Controller
@@ -27,8 +24,6 @@ public class ImageController {
     TagService tagService;
     @Autowired
     ImageService imageService;
-    @Autowired
-    private HardCodedImage hardCodedImage;
 
     @RequestMapping("/images")
     public String getAllImagePosts(Model model) {
@@ -41,20 +36,29 @@ public class ImageController {
     public String showImage(Model model, @PathVariable String title, @PathVariable Integer imageId) {
         Date date = new Date();
         Image image = imageService.getImageById(imageId);
-        model.addAttribute("image", image);
-        model.addAttribute("tags", image.getTags());
-        model.addAttribute("comments", image.getComments());
+        if (image != null) {
+            model.addAttribute("image", image);
+            model.addAttribute("tags", image.getTags());
+            model.addAttribute("comments", image.getComments());
+        } else {
+            Image image1 = new Image();
+            image1.setId(imageId);
+            model.addAttribute("image", image1);
+            model.addAttribute("tags", image1.getTags());
+            model.addAttribute("comments", image1.getComments());
+        }
+
         return "images/image";
     }
 
-    //This controller method is called when the request pattern is of type 'images/upload'
+    //This imageHoster.controller method is called when the request pattern is of type 'images/upload'
     //The method returns 'images/upload.html' file
     @RequestMapping("/images/upload")
     public String newImage() {
         return "images/upload";
     }
 
-    //This controller method is called when the request pattern is of type 'images/upload' and also the incoming request is of POST type
+    //This imageHoster.controller method is called when the request pattern is of type 'images/upload' and also the incoming request is of POST type
     //The method receives all the details of the image to be stored in the database, but currently we are not using database so the business logic simply retuns null and does not store anything in the database
     //After you get the imageFile, convert it to Base64 format and store it as a string
     //After storing the image, this method directs to the logged in user homepage displaying all the images
@@ -75,7 +79,7 @@ public class ImageController {
         return "redirect:/images";
     }
 
-    //This controller method is called when the request pattern is of type 'editImage'
+    //This imageHoster.controller method is called when the request pattern is of type 'editImage'
     //This method fetches the image with the corresponding id from the database and adds it to the model with the key as 'image'
     //The method then returns 'images/edit.html' file wherein you fill all the updated details of the image
     @RequestMapping(value = "/editImage", method = RequestMethod.GET)
@@ -96,7 +100,7 @@ public class ImageController {
         }
     }
 
-    //This controller method is called when the request pattern is of type 'images/edit' and also the incoming request is of PUT type
+    //This imageHoster.controller method is called when the request pattern is of type 'images/edit' and also the incoming request is of PUT type
     //The method receives the imageFile, imageId, updated image, along with the Http Session
     //The method adds the new imageFile to the updated image if user updates the imageFile and adds the previous imageFile to the new updated image if user does not choose to update the imageFile
     //Set an id of the new updated image
@@ -127,9 +131,9 @@ public class ImageController {
         return "redirect:/images" + updatedImage.getTitle();
     }
 
-    //This controller method is called when the request pattern is of type 'deleteImage' and also the incoming request is of DELETE type
+    //This imageHoster.controller method is called when the request pattern is of type 'deleteImage' and also the incoming request is of DELETE type
     //The method calls the deleteImage() method in the business logic passing the id of the image to be deleted
-    //Looks for a controller method with request mapping of type '/images'
+    //Looks for a imageHoster.controller method with request mapping of type '/images'
     @RequestMapping(value = "/deleteImage", method = RequestMethod.DELETE)
     public String deleteImageSubmit(@RequestParam(name = "imageId") Integer imageId, HttpSession session, Model model) {
         User user = (User) session.getAttribute("loggedUser");
@@ -146,7 +150,6 @@ public class ImageController {
         }
 
     }
-
 
 
     //This method converts the image to Base64 format
