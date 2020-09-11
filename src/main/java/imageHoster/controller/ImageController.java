@@ -121,7 +121,7 @@ public class ImageController {
         updatedImage.setUser(user);
         imageService.updateImage(updatedImage);
 
-        return "redirect:/images" + updatedImage.getTitle();
+        return "redirect:/images";
     }
 
     //This controller method is called when the request pattern is of type 'deleteImage' and also the incoming request is of DELETE type
