@@ -35,7 +35,7 @@ public class ImageController {
     @RequestMapping("/images//{imageId}/{title}")
     public String showImage(Model model, @PathVariable String title, @PathVariable Integer imageId) {
         Date date = new Date();
-        Image image = imageService.getImageById(imageId);
+        Image image = imageService.getImage(imageId);
         if (image != null) {
             model.addAttribute("image", image);
             model.addAttribute("tags", image.getTags());
