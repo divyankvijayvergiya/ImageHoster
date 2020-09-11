@@ -36,17 +36,10 @@ public class ImageController {
     public String showImage(Model model, @PathVariable String title, @PathVariable Integer imageId) {
         Date date = new Date();
         Image image = imageService.getImage(imageId);
-        if (image != null) {
-            model.addAttribute("image", image);
-            model.addAttribute("tags", image.getTags());
-            model.addAttribute("comments", image.getComments());
-        } else {
-            Image image1 = new Image();
-            image1.setId(imageId);
-            model.addAttribute("image", image1);
-            model.addAttribute("tags", image1.getTags());
-            model.addAttribute("comments", image1.getComments());
-        }
+
+        model.addAttribute("image", image);
+        model.addAttribute("tags", image.getTags());
+        model.addAttribute("comments", image.getComments());
 
         return "images/image";
     }
